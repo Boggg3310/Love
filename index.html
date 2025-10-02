@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Моей Любимой Девочке</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #ffd1ff);
+			background-size: 400% 400%;
+			animation: gradient 15s ease infinite;
+			min-height: 100vh;
+			overflow-x: hidden;
+			position: relative;
+			padding: 20px;
+		}
+
+		@keyframes gradient {
+			0% {
+				background-position: 0% 50%;
+			}
+
+			50% {
+				background-position: 100% 50%;
+			}
+
+			100% {
+				background-position: 0% 50%;
+			}
+		}
+
+		.container {
+			max-width: 800px;
+			margin: 0 auto;
+			padding: 20px;
+			position: relative;
+			z-index: 2;
+		}
+
+		h1 {
+			text-align: center;
+			font-size: 3.5rem;
+			margin: 30px 0;
+			color: transparent;
+			-webkit-text-stroke: 2px;
+			-webkit-text-stroke-color: transparent;
+			background: linear-gradient(45deg, #ff1493, #ff69b4, #dc143c, #ff69b4);
+			background-size: 400% 400%;
+			-webkit-background-clip: text;
+			background-clip: text;
+			animation: textGradient 5s ease infinite;
+			text-shadow: 0 0 10px rgba(255, 105, 180, 0.3);
+		}
+
+		@keyframes textGradient {
+			0% {
+				background-position: 0% 50%;
+			}
+
+			50% {
+				background-position: 100% 50%;
+			}
+
+			100% {
+				background-position: 0% 50%;
+			}
+		}
+
+		.message {
+			font-style: italic;
+			font-size: 1.5rem;
+			text-align: center;
+			line-height: 1.6;
+			color: #8b0000;
+			background-color: rgba(255, 255, 255, 0.7);
+			padding: 25px;
+			border-radius: 20px;
+			box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+			margin-bottom: 40px;
+			position: relative;
+			z-index: 3;
+		}
+
+		.quiz {
+			background-color: rgba(255, 255, 255, 0.85);
+			padding: 30px;
+			border-radius: 20px;
+			box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+			margin-bottom: 30px;
+			position: relative;
+			z-index: 3;
+		}
+
+		.question {
+			margin-bottom: 25px;
+			padding-bottom: 15px;
+			border-bottom: 1px dashed #ffb6c1;
+		}
+
+		.question h3 {
+			color: #8b0000;
+			margin-bottom: 15px;
+			font-size: 1.4rem;
+		}
+
+		.options {
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+		}
+
+		.option {
+			padding: 12px 18px;
+			background-color: #ffe4e6;
+			border: 2px solid #ffb6c1;
+			border-radius: 12px;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			font-size: 1.1rem;
+		}
+
+		.option:hover {
+			background-color: #ffb6c1;
+			transform: translateY(-3px);
+			box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+		}
+
+		.option.selected {
+			background-color: #ff69b4;
+			color: white;
+			border-color: #ff1493;
+			transform: scale(1.02);
+		}
+
+		button {
+			display: block;
+			margin: 25px auto;
+			padding: 15px 40px;
+			background: linear-gradient(45deg, #ff1493, #ff69b4);
+			color: white;
+			border: none;
+			border-radius: 30px;
+			font-size: 1.3rem;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			box-shadow: 0 6px 15px rgba(255, 105, 180, 0.4);
+			font-weight: bold;
+		}
+
+		button:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 10px 20px rgba(255, 105, 180, 0.5);
+		}
+
+		.result {
+			text-align: center;
+			font-size: 2.2rem;
+			color: #ff1493;
+			font-weight: bold;
+			margin-top: 25px;
+			padding: 20px;
+			border-radius: 15px;
+			background-color: rgba(255, 255, 255, 0.9);
+			opacity: 0;
+			transform: translateY(20px);
+			transition: all 0.5s ease;
+		}
+
+		.result.show {
+			opacity: 1;
+			transform: translateY(0);
+		}
+
+		.floating-image {
+			position: absolute;
+			z-index: 1;
+			max-width: 180px;
+			border-radius: 15px;
+			box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+			transition: transform 0.5s ease;
+		}
+
+		.floating-image:hover {
+			transform: scale(1.15) rotate(5deg);
+			z-index: 4;
+		}
+
+		.hearts {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			pointer-events: none;
+			z-index: 1;
+		}
+
+		.heart {
+			position: absolute;
+			width: 20px;
+			height: 20px;
+			background: transparent;
+			opacity: 0.7;
+		}
+
+		.heart:before,
+		.heart:after {
+			content: '';
+			position: absolute;
+			width: 20px;
+			height: 20px;
+			background-color: #ff69b4;
+			border-radius: 50%;
+		}
+
+		.heart:before {
+			top: -10px;
+			left: 0;
+		}
+
+		.heart:after {
+			top: 0;
+			left: 10px;
+		}
+
+		@media (max-width: 768px) {
+			h1 {
+				font-size: 2.2rem;
+			}
+
+			.message {
+				font-size: 1.2rem;
+				padding: 15px;
+			}
+
+			.floating-image {
+				max-width: 100px;
+			}
+
+			.quiz {
+				padding: 20px;
+			}
+
+			.result {
+				font-size: 1.6rem;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<!-- Плавающие сердечки -->
+	<div class="hearts" id="hearts"></div>
+
+	<!-- Плавающие изображения -->
+	<img src="https://i.pinimg.com/originals/65/22/39/652239b28a46a8be120302747ed3fffd.gif" alt="Милое изображение" class="floating-image" style="top: 5%; left: 3%; transform: rotate(-12deg);">
+	<img src="https://i.pinimg.com/736x/8c/b6/1f/8cb61f5c432e146e4b9aad26cc5effbb.jpg" alt="Милое изображение" class="floating-image" style="top: 15%; right: 5%; transform: rotate(8deg);">
+	<img src="https://avatars.mds.yandex.net/i?id=9e9e3ca318117d41288db4c2c382c82c71273a81-10807079-images-thumbs&n=13" alt="Милое изображение" class="floating-image" style="bottom: 10%; left: 4%; transform: rotate(-5deg);">
+	<img src="https://i.pinimg.com/originals/0f/ce/9d/0fce9d7ed8e9e0ef88f113d3299c14ab.jpg" alt="Милое изображение" class="floating-image" style="top: 55%; right: 3%; transform: rotate(15deg);">
+	<img src="https://i.pinimg.com/originals/b1/ef/b1/b1efb1e500b7dff09f9d0db623067f53.jpg" alt="Милое изображение" class="floating-image" style="bottom: 8%; right: 12%; transform: rotate(-8deg);">
+	<img src="https://sun9-49.userapi.com/impg/uS59VgZJugLYz7ucBL9ybTuubf8ewqTUUgeFpw/MQc-x-gGyE0.jpg?size=960x960&quality=96&sign=cb60e7fc188452973a7cc8bb0ce8d38d&c_uniq_tag=fGFTUMxTWni4-H-1dG7diu1feVVOJgZ-3luFUPEhdpE&type=album" alt="Милое изображение" class="floating-image" style="top: 12%; left: 12%; transform: rotate(5deg);">
+	<img src="https://i.pinimg.com/736x/1d/2d/18/1d2d1806a6319908843a50fdbaadaff3.jpg" alt="Милое изображение" class="floating-image" style="top: 70%; left: 8%; transform: rotate(-10deg);">
+	<img src="https://i.pinimg.com/originals/99/b3/8c/99b38c5a5c9e9079e2ee7b4cc5b17cc8.jpg" alt="Милое изображение" class="floating-image" style="top: 35%; right: 10%; transform: rotate(12deg);">
+	<img src="https://i.pinimg.com/736x/52/a1/9d/52a19dfc166fca89c90a378fe4d1c695.jpg" alt="Милое изображение" class="floating-image" style="bottom: 20%; left: 15%; transform: rotate(-15deg);">
+	<img src="https://i.pinimg.com/736x/5c/b2/ef/5cb2efd9ab0646d056cec5a44df8e7ea.jpg" alt="Милое изображение" class="floating-image" style="top: 25%; left: 5%; transform: rotate(7deg);">
+	<img src="https://i.pinimg.com/originals/7c/68/ca/7c68ca81f247b9eccd43ee1551e303f5.png" alt="Милое изображение" class="floating-image" style="bottom: 15%; right: 5%; transform: rotate(-18deg);">
+	<img src="https://i.pinimg.com/736x/d3/ac/6e/d3ac6edd7e6ae196d062154b4146d2d1.jpg" alt="Милое изображение" class="floating-image" style="top: 65%; right: 15%; transform: rotate(10deg);">
+
+	<div class="container">
+		<h1>Моей Любимой Девочке</h1>
+
+		<div class="message">
+			Моя самая лучшая и прекрасная девочка, я очень тебя люблю! Ты мое счастье и моя любовь, я невероятно сильно
+			люблю тебя и так рад, что ты со мной! Я очень радуюсь когда у тебя все хорошо и когда у тебя все получается,
+			и грущу вместе с тобой так как беспокоюсь за тебя всегда ты мое солнышко))) полюшка любимая я тебя обожаю
+			всем сердцем!!!<br><br>
+            ЛЮБЛЮ ЛЮБЛЮ ЛЮБЛЮ ЛЮБЛЮ ЛЮБЛЮ
+        </div>
+
+			<div class="quiz">
+				<div class="question">
+					<h3>1. Какой мой любимый цвет?</h3>
+					<div class="options">
+						<div class="option" data-question="1" data-value="оранжевый">оранжевый</div>
+						<div class="option" data-question="1" data-value="белый">белый</div>
+						<div class="option" data-question="1" data-value="черный">черный</div>
+						<div class="option" data-question="1" data-value="красный">красный</div>
+						<div class="option" data-question="1" data-value="синий">синий</div>
+					</div>
+				</div>
+
+				<div class="question">
+					<h3>2. Кто моя любимая девочка?</h3>
+					<div class="options">
+						<div class="option" data-question="2" data-value="Полюшка">Полюшка</div>
+						<div class="option" data-question="2" data-value="Полиночка">Полиночка</div>
+						<div class="option" data-question="2" data-value="Ты">Ты</div>
+						<div class="option" data-question="2" data-value="Именно ты">Именно ты</div>
+					</div>
+				</div>
+
+				<div class="question">
+					<h3>3. Где мы познакомились?</h3>
+					<div class="options">
+						<div class="option" data-question="3" data-value="В камере навального">В камере навального</div>
+						<div class="option" data-question="3" data-value="В госдуме">В госдуме</div>
+						<div class="option" data-question="3" data-value="В лагере">В лагере</div>
+					</div>
+				</div>
+
+				<button id="checkResult">Посмотреть результат</button>
+
+				<div class="result" id="result"></div>
+			</div>
+		</div>
+
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+            const options = document.querySelectorAll('.option');
+            const checkButton = document.getElementById('checkResult');
+            const result = document.getElementById('result');
+            const heartsContainer = document.getElementById('hearts');
+            
+            // Храним выбранные ответы
+            let selectedAnswers = {
+                1: null,
+                2: null,
+                3: null
+            };
+            
+            // Правильные ответы
+            const correctAnswers = {
+                1: ['оранжевый', 'белый', 'черный', 'красный', 'синий'], // Все ответы правильные
+                2: ['Полюшка', 'Полиночка', 'Ты', 'Именно ты'], // Все ответы правильные
+                3: ['В лагере'] // Только один правильный ответ
+            };
+            
+            // Создаем плавающие сердечки
+            function createHearts() {
+                for (let i = 0; i < 20; i++) {
+                    const heart = document.createElement('div');
+                    heart.classList.add('heart');
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.top = Math.random() * 100 + 'vh';
+                    heart.style.animation = `float ${5 + Math.random() * 10}s linear infinite`;
+                    heartsContainer.appendChild(heart);
+                }
+            }
+            
+            // Обработчик выбора ответа
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    const question = this.getAttribute('data-question');
+                    const value = this.getAttribute('data-value');
+                    
+                    // Убираем выделение с других вариантов этого вопроса
+                    document.querySelectorAll(`.option[data-question="${question}"]`).forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Выделяем выбранный вариант
+                    this.classList.add('selected');
+                    
+                    // Сохраняем выбранный ответ
+                    selectedAnswers[question] = value;
+                });
+            });
+            
+            // Проверка результатов
+            checkButton.addEventListener('click', function() {
+                // Проверяем, что на все вопросы даны ответы
+                if (!selectedAnswers[1] || !selectedAnswers[2] || !selectedAnswers[3]) {
+                    result.textContent = "Пожалуйста, ответь на все вопросы!";
+                    result.classList.add('show');
+                    return;
+                }
+                
+                // Проверяем правильность ответов
+                let correctCount = 0;
+                
+                // Вопрос 1 - все ответы правильные
+                if (correctAnswers[1].includes(selectedAnswers[1])) {
+                    correctCount++;
+                }
+                
+                // Вопрос 2 - все ответы правильные
+                if (correctAnswers[2].includes(selectedAnswers[2])) {
+                    correctCount++;
+                }
+                
+                // Вопрос 3 - только один правильный ответ
+                if (correctAnswers[3].includes(selectedAnswers[3])) {
+                    correctCount++;
+                }
+                
+                // Показываем результат
+                if (correctCount === 3) {
+                    result.textContent = "МОЯ ЛЮБИМАЯ УМНИЧКА!!! ОБОЖАЮ ТЕБЯ ВСЕМ СЕРДЦЕМ САМАЯ ЛУЧШАЯ!!!!";
+                } else {
+                    result.textContent = "Ты умничка но нужно еще попробовать)";
+                }
+                
+                result.classList.add('show');
+            });
+            
+            // Создаем плавающие сердечки
+            createHearts();
+        });
+		</script>
+</body>
+
+</html>
